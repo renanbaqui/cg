@@ -4,8 +4,8 @@
 void init();
 void display();
 
-GLint wsize_x = 610;
-GLint wsize_y = 314;
+GLint wsize_x = 550;
+GLint wsize_y = 550;
 
 float xPos, yPos;
 
@@ -16,18 +16,18 @@ void init() {
   // define o sistema de visualização - tipo de projeção
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-1, 1, -1, 1, -1, 1);
+  glOrtho(-6, 6, -6, 6, -6, 6);
 
 }
 
 //rotinas para conversao de coordenadas do mouse
 float Xc(float x){
-	xPos = x*(2.0/wsize_x) -1;
+	xPos = x*(12.0/wsize_x) -6;
 	return xPos;
 }
 
 float Yc(float y){
-	yPos = 1 - y*(2.0/wsize_y);
+	yPos = 6 - y*(12.0/wsize_y);
 	return yPos;
 }
 /*
@@ -52,19 +52,19 @@ void quad()
 void grama()
 {
   glBegin(GL_POLYGON);
-  glVertex3f(Xc(10.0), Yc(303.0), 0.0);
-  glVertex3f(Xc(10.0), Yc(229.0), 0.0);
-  glVertex3f(Xc(305.0), Yc(229.0), 0.0);
-  glVertex3f(Xc(305.0), Yc(303.0), 0.0);
+  glVertex3f(Xc(5.0), Yc(503.0), 0.0);
+  glVertex3f(Xc(5.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(290.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(290.0), Yc(503.0), 0.0);
   glEnd();
 }
 void agua()
 {
   glBegin(GL_POLYGON);
-  glVertex3f(Xc(307.0), Yc(229.0), 0.0);
-  glVertex3f(Xc(307.0), Yc(301.0), 0.0);
-  glVertex3f(Xc(606.0), Yc(301.0), 0.0);
-  glVertex3f(Xc(606.0), Yc(229.0), 0.0);
+  glVertex3f(Xc(292.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(292.0), Yc(501.0), 0.0);
+  glVertex3f(Xc(545.0), Yc(501.0), 0.0);
+  glVertex3f(Xc(545.0), Yc(429.0), 0.0);
   glEnd();
 }
 
