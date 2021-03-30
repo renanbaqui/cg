@@ -1,10 +1,20 @@
+/*
+ * pinguim.cpp
+ *
+ *  Created on: 29 de mar de 2021
+ *      Author: Flavia, Renan e Silvio
+ */
 #include <GL/glut.h>
 #include <math.h>
+const double PI = 3.1415926535898;
+
+int frameNumber = 0;
 
 void init();
 void display();
+void keyboard(unsigned char key, int x, int y);
 
-GLint wsize_x = 550;
+GLint wsize_x = 750;
 GLint wsize_y = 550;
 
 float xPos, yPos;
@@ -20,7 +30,7 @@ void init() {
 
 }
 
-//rotinas para conversao de coordenadas do mouse
+// rotinas para conversao de coordenadas do mouse
 float Xc(float x){
 	xPos = x*(12.0/wsize_x) -6;
 	return xPos;
@@ -30,366 +40,170 @@ float Yc(float y){
 	yPos = 6 - y*(12.0/wsize_y);
 	return yPos;
 }
-/*
-void lines()
-{
-  glBegin(GL_LINES);
-  glVertex3f(-4.0, 0.0, 0.0);
-  glVertex3f(4.0, 0.0, 0.0);
-  glVertex3f(0.0, 4.0, 0.0);
-  glVertex3f(0.0, -4.0, 0.0);
-  glEnd();
-}
-void quad()
-{
-  glBegin(GL_LINE_LOOP);
-  glVertex3f(-0.5, -0.5, 0.0);
-  glVertex3f(0.5, -0.5, 0.0);
-  glVertex3f(0.5, 0.5, 0.0);
-  glVertex3f(-0.5, 0.5, 0.0);
-  glEnd();
-}*/
+
 void grama()
 {
   glBegin(GL_POLYGON);
-  glVertex3f(Xc(5.0), Yc(503.0), 0.0);
+  glVertex3f(Xc(5.0), Yc(540.0), 0.0);
   glVertex3f(Xc(5.0), Yc(429.0), 0.0);
-  glVertex3f(Xc(290.0), Yc(429.0), 0.0);
-  glVertex3f(Xc(290.0), Yc(503.0), 0.0);
+  glVertex3f(Xc(374.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(374.0), Yc(540.0), 0.0);
   glEnd();
 }
+
 void agua()
 {
   glBegin(GL_POLYGON);
-  glVertex3f(Xc(292.0), Yc(429.0), 0.0);
-  glVertex3f(Xc(292.0), Yc(501.0), 0.0);
-  glVertex3f(Xc(545.0), Yc(501.0), 0.0);
-  glVertex3f(Xc(545.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(375.0), Yc(429.0), 0.0);
+  glVertex3f(Xc(375.0), Yc(540.0), 0.0);
+  glVertex3f(Xc(745.0), Yc(540.0), 0.0);
+  glVertex3f(Xc(745.0), Yc(429.0), 0.0);
   glEnd();
 }
 
-void estrada()
+void circulo(double raio)
 {
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(0.0), Yc(358.0), 0.0);
-  glVertex3f(Xc(0.0), Yc(297.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(297.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(358.0), 0.0);
-  glEnd();
+	int pontos = 100;
+  	double ang = 0;
+  	int i = 0;
+  	glBegin(GL_POLYGON);
+  		for (i = 0; i < pontos; i++) {
+  			ang = 2*PI*i / pontos;
+  			glVertex2f(cos(ang)*raio, sin(ang)*raio);
+  		}
+  	glEnd();
+
 }
 
-void linha()
+void triangulo()
 {
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(0.0), Yc(332.0), 0.0);
-  glVertex3f(Xc(0.0), Yc(327.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(327.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(332.0), 0.0);
-  glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f( 0.0f, 0.0f);
+	glVertex2f( 0.25f, 0.75f);
+	glVertex2f( 0.50f, 0.0f);
+	glEnd();
 }
 
-void montanhas()
+void cabeca()
 {
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(0.0), Yc(297.0), 0.0);
-  glVertex3f(Xc(0.0), Yc(262.0), 0.0);
-  glVertex3f(Xc(122.0), Yc(193.0), 0.0);
-  glVertex3f(Xc(147.0), Yc(223.0), 0.0);
-  glVertex3f(Xc(247.0), Yc(157.0), 0.0);
-  glVertex3f(Xc(386.0), Yc(272.0), 0.0);
-  glVertex3f(Xc(500.0), Yc(220.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(264.0), 0.0);
-  glVertex3f(Xc(575.0), Yc(297.0), 0.0);
-  glVertex3f(Xc(0.0), Yc(297.0), 0.0);
-  glEnd();
-}
-
-void retangulo()
-{
-  //centro da figura: 287.5 e 205.0
-  //altura do retangulo: 34
-  //comprimento do retangulo: 148
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(213.5), Yc(188.0), 0.0);
-  glVertex3f(Xc(213.5), Yc(222.0), 0.0);
-  glVertex3f(Xc(361.5), Yc(222.0), 0.0);
-  glVertex3f(Xc(361.5), Yc(188.0), 0.0);
-  glEnd();
-}
-
-void base()
-{
-  //centro da figura: 287.5 e 205.0
-  //altura do retangulo: 170
-  //comprimento do retangulo: 6
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(284.5), Yc(120.0), 0.0);
-  glVertex3f(Xc(284.5), Yc(290.0), 0.0);
-  glVertex3f(Xc(290.5), Yc(290.0), 0.0);
-  glVertex3f(Xc(290.5), Yc(120.0), 0.0);
-  glEnd();
-}
-
-void catavento()
-{
-  glBegin(GL_POLYGON);
-  glVertex3f(Xc(287.5), Yc(205.0), 0.0);
-  glVertex3f(Xc(301.5), Yc(179.0), 0.0);
-  glVertex3f(Xc(311.5), Yc(125.0), 0.0);
-  glVertex3f(Xc(287.5), Yc(175.0), 0.0);
-  glEnd();
-}
-
-void circulo()
-{
-  glBegin(GL_POINTS);
-    for(int i=0;i<1000;++i)
-    {
-      glVertex3f(cos(2*3.14159*i/1000.0),sin(2*3.14159*i/1000.0),0);
-    }
-  glEnd();
-}
-
-void linhas()
-{
-  //linha tamanho 128
-  glBegin(GL_LINES);
-  glVertex3f(Xc(287.5), Yc(269.0), 0.0);
-  glVertex3f(Xc(287.5), Yc(141.0), 0.0);
-  glEnd();
-}
-
-void display() {
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  glColor3f(0.0, 0.725, 0.0);
-  grama();
-
-  glColor3f(0.0, 0.0, 1.0);
-  agua();
-
-
-/*
-  //rodas - circulos
-  for (float x=0.070; x>0.055; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(208.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.0, 0.0, 0.0);
- 	circulo();
- 	glPopMatrix();
-  }
-  for (float x=0.070; x>0.055; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(289.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.0, 0.0, 0.0);
- 	circulo();
- 	glPopMatrix();
-  }
-  for (float x=0.055; x>0.015; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(208.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.792, 0.757, 0.761);
- 	circulo();
- 	glPopMatrix();
-  }
-  for (float x=0.055; x>0.015; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(289.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.792, 0.757, 0.761);
- 	circulo();
- 	glPopMatrix();
-  }
-  for (float x=0.015; x>0.000; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(208.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.0, 0.0, 0.0);
- 	circulo();
- 	glPopMatrix();
-  }
-  for (float x=0.015; x>0.000; x-= 0.001)
-  {
-    glPushMatrix();
- 	glTranslatef(Xc(289.0), Yc(331.0), 0.0);
- 	glScalef(x, x,0);
- 	glColor3f(0.0, 0.0, 0.0);
- 	circulo();
- 	glPopMatrix();
-  }
-
-  //rodas - linhas
-  for (float alpha = 15.0; alpha<181.0; alpha+= 30.0)
-  {
-    glPushMatrix();
-    glTranslatef(Xc(208.0), Yc(331.0), 0.0);
-    glRotatef(alpha, 0.0, 0.0, 1.0);
-    glScalef(0.2,0.2,0);
-    glColor3f(0.0, 0.0, 0.0);
-    linhas();
-    glPopMatrix();
-  }
-  for (float alpha = 15.0; alpha<181.0; alpha+= 30.0)
-  {
-    glPushMatrix();
-    glTranslatef(Xc(289.0), Yc(331.0), 0.0);
-    glRotatef(alpha, 0.0, 0.0, 1.0);
-    glScalef(0.2,0.2,0);
-    glColor3f(0.0, 0.0, 0.0);
-    linhas();
-    glPopMatrix();
-  }
-
-  //carro - base
-  glPushMatrix();
-  glTranslatef(Xc(248.0), Yc(307.0), 0.0);
-  glScalef(1.0,1.0,0);
-  glColor3f(1.0, 0.0, 0.0);
-  retangulo();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(228.0), Yc(283.0), 0.0);
-  glScalef(0.5,0.5,0);
-  glColor3f(1.0, 0.0, 0.0);
-  retangulo();
-  glPopMatrix();
-
-  //sol - circulo
-  for (float x=0.170; x>0.000; x-= 0.001)
-  {
-    glPushMatrix();
-	glTranslatef(Xc(451.0), Yc(57.0), 0.0);
-	glScalef(x, x,0);
-	glColor3f(0.882, 1.0, 0.0);
-	circulo();
+	glPushMatrix();
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 1.0, 0.0);
+	glVertex2f( 0.8f, 0.5f);
+	glVertex2f( 1.32f, -0.5f);
+	glVertex2f( -0.8f, -0.5f);
+	glEnd();
 	glPopMatrix();
-  }
-
-  //sol - linhas
-  for (float alpha = 15.0; alpha<181.0; alpha+= 30.0)
-  {
-    glPushMatrix();
-    glTranslatef(Xc(451.0), Yc(57.0), 0.0);
-    glRotatef(alpha, 0.0, 0.0, 1.0);
-    glScalef(0.8,0.8,0);
-    glColor3f(0.882, 1.0, 0.0);
-    linhas();
-    glPopMatrix();
-  }
-
-  //cataventos - bases
-  glPushMatrix();
-  glTranslatef(Xc(304.0), Yc(173.0), 0.0);
-  glScalef(1.0,1.0,0);
-  glColor3f(0.663, 0.576, 0.639);
-  base();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(180.0), Yc(169.0), 0.0);
-  glScalef(0.5,0.5,0);
-  glColor3f(0.663, 0.576, 0.639);
-  base();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(61.0), Yc(171.0), 0.0);
-  glScalef(0.8,0.8,0);
-  glColor3f(0.663, 0.576, 0.639);
-  base();
-  glPopMatrix();
-
-  //cataventos - cataventos
-  //catavento 1
-  glPushMatrix();
-  glTranslatef(Xc(304.0), Yc(91.0), 0.0);
-  //glRotatef(alpha, 0.0, 0.0, 1.0);
-  glScalef(1.0,1.0,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(304.0), Yc(91.0), 0.0);
-  glRotatef(120.0, 0.0, 0.0, 1.0);
-  glScalef(1.0,1.0,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(304.0), Yc(91.0), 0.0);
-  glRotatef(240.0, 0.0, 0.0, 1.0);
-  glScalef(1.0,1.0,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  //catavento 2
-  glPushMatrix();
-  glTranslatef(Xc(179.0), Yc(127.0), 0.0);
-  //glRotatef(alpha, 0.0, 0.0, 1.0);
-  glScalef(0.45,0.45,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(179.0), Yc(127.0), 0.0);
-  glRotatef(120.0, 0.0, 0.0, 1.0);
-  glScalef(0.45,0.45,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(179.0), Yc(127.0), 0.0);
-  glRotatef(240.0, 0.0, 0.0, 1.0);
-  glScalef(0.45,0.45,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  //catavento 3
-  glPushMatrix();
-  glTranslatef(Xc(61.0), Yc(100.0), 0.0);
-  //glRotatef(alpha, 0.0, 0.0, 1.0);
-  glScalef(0.8,0.8,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(61.0), Yc(100.0), 0.0);
-  glRotatef(120.0, 0.0, 0.0, 1.0);
-  glScalef(0.8,0.8,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-
-  glPushMatrix();
-  glTranslatef(Xc(61.0), Yc(100.0), 0.0);
-  glRotatef(240.0, 0.0, 0.0, 1.0);
-  glScalef(0.8,0.8,0);
-  glColor3f(1.0, 0.0, 0.0);
-  catavento();
-  glPopMatrix();
-  */
-  glutSwapBuffers();
+	glPushMatrix();
+	glColor3f(0.0, 0.8, 0.0);
+	circulo(1);
+	glColor3f(1.0, 1.0, 1.0);
+	glTranslatef(0.5, 0.3, 0.0);
+	circulo(0.3);
+	glPopMatrix();
+}
+void corpo()
+{
+	glColor3f(0.0, 0.0, 0.0);
+	glScalef(1.0, 2.0, 0.0);
+	circulo(1);
+	glColor3f(1.0, 1.0, 1.0);
+	glTranslatef(0.3, 0.0, 0.0);
+	glScalef(0.5, 0.8, 0.0);
+	circulo(1);
 }
 
+void pata()
+{
+  	glColor3f(0.7, 0.0, 0.0);
+  	glPushMatrix();
+	glTranslatef(-0.60, -2.55, 0.0);
+	triangulo();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.10, -2.55, 0.0);
+	triangulo();
+	glPopMatrix();
+}
+
+void pinguim()
+{
+	glPushMatrix();
+	glTranslatef(0.1, 2.5, 0.0);
+	glScalef(0.5, 0.5, 0.0);
+	cabeca();
+	glPopMatrix();
+	pata();
+	corpo();
+}
+
+void filhote()
+{
+	// Cabeça
+	glPushMatrix();
+	glTranslatef(0.0, 1.5, 0.0);
+	glScalef(0.7, 0.7, 0.0);
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 1.0, 0.0);
+	glVertex2f( 0.8f, 0.5f);
+	glVertex2f( 1.32f, -0.5f);
+	glVertex2f( -0.8f, -0.5f);
+	glEnd();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.0, 1.5, 0.0);
+	glScalef(0.7, 0.7, 0.0);
+	glColor3f(0.0, 0.8, 0.0);
+	circulo(1);
+	glColor3f(1.0, 0.0, 0.0);
+	glTranslatef(0.5, 0.3, 0.0);
+	circulo(0.3);
+	glPopMatrix();
+
+	// Corpo
+	glTranslatef(0.0, -0.7, 0.0);
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 0.0);
+	glScalef(1.0, 1.5, 0.0);
+	circulo(1);
+	glColor3f(1.0, 1.0, 1.0);
+	glTranslatef(0.3, 0.0, 0.0);
+	glScalef(0.5, 0.6, 0.0);
+	circulo(1);
+	glPopMatrix();
+    // Patas
+	glTranslatef(0.0, 0.5, 0.0);
+	glPushMatrix();
+	glColor3f(0.0, 0.0, 0.0);
+	pata();
+	glPopMatrix();
+}
+
+void display()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor3f(0.0, 0.725, 0.0);
+	grama();
+
+	glColor3f(0.0, 0.0, 1.0);
+	agua();
+
+	glPushMatrix();
+	glTranslatef(-1.0, -2.4, 0.0);
+	glScalef(0.4, 0.4, 0.0);
+	pinguim();
+	glPopMatrix();
+
+	glTranslatef(-5.0, -2.8, 0.0);
+	glScalef(0.2, 0.2, 0.0);
+	filhote();
+
+	glutSwapBuffers();
+}
 
 int main(int argc, char** argv) {
 
@@ -415,6 +229,10 @@ int main(int argc, char** argv) {
   // Define display() como a função de desenho (display callback) para a janela corrente.
   // Quando GLUT determina que esta janela deve ser redesenhada, a função de desenho é chamada.
   glutDisplayFunc(display);
+
+  // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
+  // A função de teclado deve possuir o seguinte protótipo:
+  //glutKeyboardFunc(keyboard);
 
   //Inicia o loop de processamento de desenhos com GLUT.
   // Esta rotina deve ser chamada pelo menos uma vez em um programa que utilize a biblioteca GLUT.
