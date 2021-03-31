@@ -9,10 +9,15 @@
 const double PI = 3.1415926535898;
 
 int frameNumber = 0;
+GLfloat movebola=0;
+GLint direcao=2;
 
 void init();
 void display();
-void keyboard(unsigned char key, int x, int y);
+void bola(int passo);
+// alteracao na função keyboard para adequar a glutSpecialFunc
+void keyboard(int key, int x, int y);
+
 
 GLint wsize_x = 750;
 GLint wsize_y = 550;
@@ -193,7 +198,7 @@ void display()
 	agua();
 
 	glPushMatrix();
-	glTranslatef(-1.0, -2.4, 0.0);
+	glTranslatef(movebola, -2.4, 0.0);
 	glScalef(0.4, 0.4, 0.0);
 	pinguim();
 	glPopMatrix();
@@ -230,14 +235,58 @@ int main(int argc, char** argv) {
   // Quando GLUT determina que esta janela deve ser redesenhada, a função de desenho é chamada.
   glutDisplayFunc(display);
 
+  glutTimerFunc(10,bola,1);
+
   // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
   // A função de teclado deve possuir o seguinte protótipo:
-  //glutKeyboardFunc(keyboard);
+  // glutKeyboardFunc(keyboard);
 
-  //Inicia o loop de processamento de desenhos com GLUT.
+  // Funcao especial do GLUT para teclas de setas
+  glutSpecialFunc(keyboard);
+  // Inicia o loop de processamento de desenhos com GLUT.
   // Esta rotina deve ser chamada pelo menos uma vez em um programa que utilize a biblioteca GLUT.
   glutMainLoop();
 
   return 0;
 
+}
+
+void keyboard(int key, int x, int y){
+  switch (key) {
+  case GLUT_KEY_LEFT:
+	direcao = 0;
+	//exit(0);
+	break;
+  case GLUT_KEY_RIGHT:
+	direcao = 1;
+	//exit(0);
+	break;
+  default:
+    direcao = 2;
+    break;
+  }
+}
+
+void bola(int passo)
+{
+if(direcao==1)
+{
+movebola += (float)passo/50;
+// limite direito
+if(movebola>1.0) direcao = 0;
+}
+
+if(direcao==0)
+{
+movebola -= (float)passo/50;
+// limite esquerdo
+if(movebola<-5.5) direcao = 1;
+}
+
+if(direcao==2)
+{
+movebola += 0;
+}
+glutPostRedisplay();
+glutTimerFunc(10,bola,1);
 }
