@@ -1,5 +1,5 @@
 /*
- * pinguim.cpp
+ * penguim.cpp
  *
  *  Created on: 29 de mar de 2021
  *      Author: Flavia, Renan e Silvio
@@ -9,13 +9,13 @@
 const double PI = 3.1415926535898;
 
 int frameNumber = 0;
-GLfloat movebola=0;
-GLint direcao=2;
+GLfloat moveping = 0;
+GLint direcao = 2;
 
 void init();
 void display();
-void bola(int passo);
-// alteracao na funÃ§Ã£o keyboard para adequar a glutSpecialFunc
+void move(int passo);
+// alteracao na função keyboard para adequar a glutSpecialFunc
 void keyboard(int key, int x, int y);
 
 
@@ -28,7 +28,7 @@ void init() {
   // define a cor de background da janela
   glClearColor(1.0, 1.0, 1.0, 1.0);
 
-  // define o sistema de visualizaÃ§Ã£o - tipo de projeÃ§Ã£o
+  // define o sistema de visualização - tipo de projeção
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(-6, 6, -6, 6, -6, 6);
@@ -78,6 +78,19 @@ void circulo(double raio)
   		}
   	glEnd();
 
+}
+
+void circulovazio(double raio)
+{
+	int pontos = 100;
+	  	double ang = 0;
+	  	int i = 0;
+	  	glBegin(GL_LINE_LOOP);
+	  		for (i = 0; i < pontos; i++) {
+	  			ang = 2*PI*i / pontos;
+	  			glVertex2f(cos(ang)*raio, sin(ang)*raio);
+	  		}
+	  	glEnd();
 }
 
 void triangulo()
@@ -144,7 +157,7 @@ void pinguim()
 
 void filhote()
 {
-	// CabeÃ§a
+	// Cabeça
 	glPushMatrix();
 	glTranslatef(0.0, 1.5, 0.0);
 	glScalef(0.7, 0.7, 0.0);
@@ -184,6 +197,25 @@ void filhote()
 	glPopMatrix();
 }
 
+void peixe()
+{
+	glColor3f(0.0, 0.0, 0.0);
+	glPushMatrix();
+	glLineWidth(3);
+	glScalef(0.5, 1.5, 0.0);
+	circulovazio(1.0);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.0, -1.8, 0.0);
+	glBegin(GL_TRIANGLES);
+	glVertex3f( 0.0f, 0.35f, 0.0f);
+	glVertex3f(-0.35f,-0.35f, 0.0f);
+	glVertex3f( 0.35f,-0.35f, 0.0f);
+	glEnd();
+	glPopMatrix();
+}
+
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -198,57 +230,46 @@ void display()
 	agua();
 
 	glPushMatrix();
-	glTranslatef(movebola, -2.4, 0.0);
+	glTranslatef(moveping, -2.4, 0.0);
 	glScalef(0.4, 0.4, 0.0);
 	pinguim();
 	glPopMatrix();
 
+	glPushMatrix();
 	glTranslatef(-5.0, -2.8, 0.0);
 	glScalef(0.2, 0.2, 0.0);
 	filhote();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(2.5, -3.8, 0.0);
+	glRotatef(90.0, 0.0, 0.0, 1.0);
+	glScalef(0.15, 0.15, 0.0);
+	peixe();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(5.0, -4.5, 0.0);
+	glRotatef(90.0, 0.0, 0.0, 1.0);
+	glScalef(0.18, 0.18, 0.0);
+	peixe();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(1.0, -5.5, 0.0);
+	glRotatef(-90.0, 0.0, 0.0, 1.0);
+	glScalef(0.18, 0.18, 0.0);
+	peixe();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.5, -5.1, 0.0);
+	glRotatef(-90.0, 0.0, 0.0, 1.0);
+	glScalef(0.15, 0.15, 0.0);
+	peixe();
+	glPopMatrix();
 
 	glutSwapBuffers();
-}
-
-int main(int argc, char** argv) {
-
-  //Inicializa a biblioteca GLUT e negocia uma seÃ§Ã£o com o gerenciador de janelas.
-  //Ã‰ possÃ­vel passar argumentos para a funÃ§Ã£o glutInit provenientes da linha de execuÃ§Ã£o, tais como informaÃ§Ãµes sobre a geometria da tela
-  glutInit(&argc, argv);
-
-  //Informa Ã  biblioteca GLUT o modo do display a ser utilizado quando a janela grÃ¡fica for criada.
-  // O flag GLUT_SINGLE forÃ§a o uso de uma janela com buffer simples, significando que todos os desenhos serÃ£o feitos diretamente nesta janela.
-  // O flag GLUT_RGB determina que o modelo de cor utilizado serÃ¡ o modelo RGB.
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-
-  //Define o tamanho inicial da janela, 256x256 pixels, e a posiÃ§Ã£o inicial do seu canto superior esquerdo na tela, (x, y)=(100, 100).
-  glutInitWindowSize(wsize_x, wsize_y);
-  glutInitWindowPosition(100, 100);
-
-  // Cria uma janela e define seu tÃ­tulo
-  glutCreateWindow("Trabalho");
-
-  //Nesta funÃ§Ã£o Ã© definido o estado inicial do OpenGL. Ajustes podem ser feitos para o usuÃ¡rio nessa funÃ§Ã£o.
-  init();
-
-  // Define display() como a funÃ§Ã£o de desenho (display callback) para a janela corrente.
-  // Quando GLUT determina que esta janela deve ser redesenhada, a funÃ§Ã£o de desenho Ã© chamada.
-  glutDisplayFunc(display);
-
-  glutTimerFunc(10,bola,1);
-
-  // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverÃ¡ chama a funÃ§Ã£o keyboard() para tratar eventos de teclado (keyboard callback).
-  // A funÃ§Ã£o de teclado deve possuir o seguinte protÃ³tipo:
-  // glutKeyboardFunc(keyboard);
-
-  // Funcao especial do GLUT para teclas de setas
-  glutSpecialFunc(keyboard);
-  // Inicia o loop de processamento de desenhos com GLUT.
-  // Esta rotina deve ser chamada pelo menos uma vez em um programa que utilize a biblioteca GLUT.
-  glutMainLoop();
-
-  return 0;
-
 }
 
 void keyboard(int key, int x, int y){
@@ -267,26 +288,69 @@ void keyboard(int key, int x, int y){
   }
 }
 
-void bola(int passo)
+void move(int passo)
 {
-if(direcao==1)
-{
-movebola += (float)passo/50;
-// limite direito
-if(movebola>1.0) direcao = 0;
-}
+	if(direcao==1)
+	{
+		moveping += (float)passo/50;
+		// limite direito
+		if(moveping>1.0)
+			direcao = 0;
+	}
 
-if(direcao==0)
-{
-movebola -= (float)passo/50;
-// limite esquerdo
-if(movebola<-5.5) direcao = 1;
-}
+	if(direcao==0)
+	{
+		moveping -= (float)passo/50;
+		// limite esquerdo
+		if(moveping<-5.5)
+			direcao = 1;
+	}
 
-if(direcao==2)
-{
-movebola += 0;
-}
+	if(direcao==2)
+	{
+		moveping += 0;
+	}
 glutPostRedisplay();
-glutTimerFunc(10,bola,1);
+glutTimerFunc(10,move,1);
+}
+
+int main(int argc, char** argv) {
+
+  //Inicializa a biblioteca GLUT e negocia uma seção com o gerenciador de janelas.
+  //É possível passar argumentos para a função glutInit provenientes da linha de execução, tais como informações sobre a geometria da tela
+  glutInit(&argc, argv);
+
+  //Informa à biblioteca GLUT o modo do display a ser utilizado quando a janela gráfica for criada.
+  // O flag GLUT_SINGLE força o uso de uma janela com buffer simples, significando que todos os desenhos serão feitos diretamente nesta janela.
+  // O flag GLUT_RGB determina que o modelo de cor utilizado será o modelo RGB.
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+
+  //Define o tamanho inicial da janela, 256x256 pixels, e a posição inicial do seu canto superior esquerdo na tela, (x, y)=(100, 100).
+  glutInitWindowSize(wsize_x, wsize_y);
+  glutInitWindowPosition(100, 100);
+
+  // Cria uma janela e define seu título
+  glutCreateWindow("Trabalho");
+
+  //Nesta função é definido o estado inicial do OpenGL. Ajustes podem ser feitos para o usuário nessa função.
+  init();
+
+  // Define display() como a função de desenho (display callback) para a janela corrente.
+  // Quando GLUT determina que esta janela deve ser redesenhada, a função de desenho é chamada.
+  glutDisplayFunc(display);
+
+  glutTimerFunc(10,move,1);
+
+  // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
+  // A função de teclado deve possuir o seguinte protótipo:
+  // glutKeyboardFunc(keyboard);
+
+  // Funcao especial do GLUT para teclas de setas
+  glutSpecialFunc(keyboard);
+  // Inicia o loop de processamento de desenhos com GLUT.
+  // Esta rotina deve ser chamada pelo menos uma vez em um programa que utilize a biblioteca GLUT.
+  glutMainLoop();
+
+  return 0;
+
 }
