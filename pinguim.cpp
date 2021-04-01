@@ -9,7 +9,7 @@
 const double PI = 3.1415926535898;
 
 int frameNumber = 0;
-GLfloat moveping = 0;
+GLfloat moveping = 0.0, alturaping = -2.4, rotaping = 0.0, escalaping = 0.4;
 GLint direcao = 2;
 
 void init();
@@ -230,8 +230,9 @@ void display()
 	agua();
 
 	glPushMatrix();
-	glTranslatef(moveping, -2.4, 0.0);
-	glScalef(0.4, 0.4, 0.0);
+	glTranslatef(moveping, alturaping, 0.0);
+	glRotatef(rotaping, 0.0, 0.0, 1.0);
+	glScalef(escalaping, 0.4, 0.0);
 	pinguim();
 	glPopMatrix();
 
@@ -293,23 +294,38 @@ void move(int passo)
 	if(direcao==1)
 	{
 		moveping += (float)passo/50;
+		escalaping = 0.4;
 		// limite direito
-		if(moveping>1.0)
+		if(moveping>5.5)
 			direcao = 0;
+		rotaping = 0;
 	}
-
 	if(direcao==0)
 	{
 		moveping -= (float)passo/50;
+		escalaping = -0.4;
 		// limite esquerdo
 		if(moveping<-5.5)
 			direcao = 1;
 	}
-
 	if(direcao==2)
 	{
 		moveping += 0;
 	}
+	if(moveping>0.0){
+		rotaping = 270;
+		alturaping = -4.0;
+	}
+	if(moveping<0.0){
+		rotaping = 0;
+		alturaping = -2.4;
+
+
+	}
+	if(direcao==0 && moveping>0.0){
+		rotaping = 90;
+	}
+
 glutPostRedisplay();
 glutTimerFunc(10,move,1);
 }
