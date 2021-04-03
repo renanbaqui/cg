@@ -10,7 +10,11 @@ const double PI = 3.1415926535898;
 
 int frameNumber = 0;
 GLfloat moveping = 0.0, alturaping = -2.4, rotaping = 0.0, escalaping = 0.4;
-GLint direcao = 2;
+GLfloat movepeixe1 = 2.5, alturapeixe1 = -3.8, rotapeixe1 = 0.0, escalapeixe1 = 0.15;
+GLfloat movepeixe2 = 5.0, alturapeixe2 = -4.5, rotapeixe2 = 0.0, escalapeixe2 = 0.18;
+GLfloat movepeixe3 = 1.0, alturapeixe3 = -5.5, rotapeixe3 = 0.0, escalapeixe3 = 0.18;
+GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 0.15;
+GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0;
 
 void init();
 void display();
@@ -241,32 +245,32 @@ void display()
 	glScalef(0.2, 0.2, 0.0);
 	filhote();
 	glPopMatrix();
-
+    // peixe1
 	glPushMatrix();
-	glTranslatef(2.5, -3.8, 0.0);
+	glTranslatef(movepeixe1, alturapeixe1, 0.0);
 	glRotatef(90.0, 0.0, 0.0, 1.0);
-	glScalef(0.15, 0.15, 0.0);
+	glScalef(0.15, escalapeixe1, 0.0);
 	peixe();
 	glPopMatrix();
-
+    // peixe2
 	glPushMatrix();
-	glTranslatef(5.0, -4.5, 0.0);
+	glTranslatef(movepeixe2, alturapeixe2, 0.0);
 	glRotatef(90.0, 0.0, 0.0, 1.0);
-	glScalef(0.18, 0.18, 0.0);
+	glScalef(0.18, escalapeixe2, 0.0);
 	peixe();
 	glPopMatrix();
-
+    // peixe3
 	glPushMatrix();
-	glTranslatef(1.0, -5.5, 0.0);
+	glTranslatef(movepeixe3, alturapeixe3, 0.0);
 	glRotatef(-90.0, 0.0, 0.0, 1.0);
-	glScalef(0.18, 0.18, 0.0);
+	glScalef(0.18, escalapeixe3, 0.0);
 	peixe();
 	glPopMatrix();
-
+    //peixe4
 	glPushMatrix();
-	glTranslatef(3.5, -5.1, 0.0);
+	glTranslatef(movepeixe4, alturapeixe4, 0.0);
 	glRotatef(-90.0, 0.0, 0.0, 1.0);
-	glScalef(0.15, 0.15, 0.0);
+	glScalef(0.15, escalapeixe4, 0.0);
 	peixe();
 	glPopMatrix();
 
@@ -288,7 +292,7 @@ void keyboard(int key, int x, int y){
     break;
   }
 }
-
+// movimentacao pinguim
 void move(int passo)
 {
 	if(direcao==1)
@@ -330,6 +334,98 @@ glutPostRedisplay();
 glutTimerFunc(10,move,1);
 }
 
+void move2(int passo){
+	//movimenta para direita
+	if(direcaopeixe1==0)
+	{
+		movepeixe1 += (float)passo/50;
+		escalapeixe1 = -0.15;
+		// limite direito
+		if(movepeixe1>5.5)
+			direcaopeixe1 = 1;
+	}
+	//movimenta para esquerda
+	if(direcaopeixe1==1)
+	{
+		movepeixe1 -= (float)passo/50;
+		escalapeixe1 = 0.15;
+		// limite esquerdo
+		if(movepeixe1<0.5)
+			direcaopeixe1 = 0;
+	}
+glutPostRedisplay();
+glutTimerFunc(10,move2,1);
+}
+
+void move3(int passo){
+	//movimenta para direita
+	if(direcaopeixe2==0)
+	{
+		movepeixe2 += (float)passo/50;
+		escalapeixe2 = -0.18;
+		// limite direito
+		if(movepeixe2>5.5)
+			direcaopeixe2 = 1;
+	}
+	//movimenta para esquerda
+	if(direcaopeixe2==1)
+	{
+		movepeixe2 -= (float)passo/50;
+		escalapeixe2 = 0.18;
+		// limite esquerdo
+		if(movepeixe2<0.5)
+			direcaopeixe2 = 0;
+	}
+glutPostRedisplay();
+glutTimerFunc(10,move3,1);
+}
+
+void move4(int passo){
+	//movimenta para direita
+	if(direcaopeixe3==0)
+	{
+		movepeixe3 += (float)passo/50;
+		escalapeixe3 = 0.18;
+		// limite direito
+		if(movepeixe3>5.5)
+			direcaopeixe3 = 1;
+	}
+	//movimenta para esquerda
+	if(direcaopeixe3==1)
+	{
+		movepeixe3 -= (float)passo/50;
+		escalapeixe3 = -0.18;
+		// limite esquerdo
+		if(movepeixe3<0.5)
+			direcaopeixe3 = 0;
+	}
+glutPostRedisplay();
+glutTimerFunc(10,move4,1);
+}
+
+void move5(int passo){
+	//movimenta para direita
+	if(direcaopeixe4==0)
+	{
+		movepeixe4 += (float)passo/50;
+		escalapeixe4 = 0.15;
+		// limite direito
+		if(movepeixe4>5.5)
+			direcaopeixe4 = 1;
+	}
+	//movimenta para esquerda
+	if(direcaopeixe4==1)
+	{
+		movepeixe4 -= (float)passo/50;
+		escalapeixe4 = -0.18;
+		// limite esquerdo
+		if(movepeixe4<0.5)
+			direcaopeixe4 = 0;
+	}
+glutPostRedisplay();
+glutTimerFunc(10,move5,1);
+}
+
 int main(int argc, char** argv) {
 
   //Inicializa a biblioteca GLUT e negocia uma seção com o gerenciador de janelas.
@@ -355,7 +451,16 @@ int main(int argc, char** argv) {
   // Quando GLUT determina que esta janela deve ser redesenhada, a função de desenho é chamada.
   glutDisplayFunc(display);
 
+  // movimentacao pinguim
   glutTimerFunc(10,move,1);
+  // movimentacao peixe1
+  glutTimerFunc(10,move2,1);
+  // movimentacao peixe2
+  glutTimerFunc(10,move3,1);
+  // movimentacao peixe3
+  glutTimerFunc(10,move4,1);
+  // movimentacao peixe4
+  glutTimerFunc(10,move5,1);
 
   // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
   // A função de teclado deve possuir o seguinte protótipo:
