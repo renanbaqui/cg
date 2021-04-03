@@ -97,6 +97,21 @@ void circulovazio(double raio)
 	  	glEnd();
 }
 
+void semicirculo(double raio)
+{
+	int pontos = 100;
+	double ang = 0;
+	int i = 0;
+	glBegin(GL_POLYGON);
+		for (i = 0; i < pontos; i++)
+		{
+		  	ang = (2*PI*i)/4 / pontos;
+		  	glVertex2f(cos(ang)*raio, sin(ang)*raio);
+		}
+	glEnd();
+
+}
+
 void triangulo()
 {
 	glBegin(GL_POLYGON);
@@ -219,6 +234,22 @@ void peixe()
 	glPopMatrix();
 }
 
+void passaro()
+{
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 1.0);
+	glScalef(1.0, 1.0, 0.0);
+	glRotatef(52.0, 0.0, 0.0, 1.0);
+	glTranslatef(0.0, -0.9, 0.0);
+	semicirculo(1);
+	glPopMatrix();
+	glPushMatrix();
+	glScalef(1.0, 1.0, 0.0);
+	glRotatef(38.0, 0.0, 0.0, 1.0);
+	glTranslatef(-0.9, 0.0, 0.0);
+	semicirculo(1);
+	glPopMatrix();
+}
 
 void display()
 {
@@ -266,12 +297,18 @@ void display()
 	glScalef(0.18, escalapeixe3, 0.0);
 	peixe();
 	glPopMatrix();
-    //peixe4
+    // peixe4
 	glPushMatrix();
 	glTranslatef(movepeixe4, alturapeixe4, 0.0);
 	glRotatef(-90.0, 0.0, 0.0, 1.0);
 	glScalef(0.15, escalapeixe4, 0.0);
 	peixe();
+	glPopMatrix();
+	// passaro
+	glPushMatrix();
+	glTranslatef(0.0, 4.0, 0.0);
+	glScalef(1.0, 1.0, 0.0);
+	passaro();
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -299,16 +336,17 @@ void move(int passo)
 	{
 		moveping += (float)passo/50;
 		escalaping = 0.4;
-		// limite direito
-		if(moveping>5.5)
-			direcao = 0;
-		rotaping = 0;
+		// limite direito de movimento
+		if(moveping>5.0){
+	      direcao = 0;
+		  rotaping = 0;
+		}
 	}
 	if(direcao==0)
 	{
 		moveping -= (float)passo/50;
 		escalaping = -0.4;
-		// limite esquerdo
+		// limite esquerdo de movimento
 		if(moveping<-5.5)
 			direcao = 1;
 	}
@@ -316,24 +354,30 @@ void move(int passo)
 	{
 		moveping += 0;
 	}
+	// ao entrar na agua o pinguim eh rotacionado e muda posicao
 	if(moveping>0.0){
 		rotaping = 270;
 		alturaping = -4.0;
 	}
+	// ao entrar na grama o pinguim eh rotacionado e muda posicao
 	if(moveping<0.0){
 		rotaping = 0;
 		alturaping = -2.4;
-
-
+    // se o pinguim estiver na agua e nadando para esquerda, rotaciona para olhar para baixo
 	}
 	if(direcao==0 && moveping>0.0){
 		rotaping = 90;
 	}
 
+// tentativa de consertar bug que quando esta nadando para o lado esquerdo e digita qualquer tecla, ele olha para cima
+//	if(direcao==2 && moveping>0.0){
+//		rotaping = 90;
+//	}
+
 glutPostRedisplay();
 glutTimerFunc(10,move,1);
 }
-
+// movimentacao peixe1
 void move2(int passo){
 	//movimenta para direita
 	if(direcaopeixe1==0)
