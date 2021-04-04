@@ -324,6 +324,14 @@ void keyboard(int key, int x, int y){
 	direcao = 1;
 	//exit(0);
 	break;
+  case GLUT_KEY_UP:
+	direcao = 3;
+	//exit(0);
+	break;
+  case GLUT_KEY_DOWN:
+	direcao = 4;
+	//exit(0);
+	break;
   default:
     direcao = 2;
     break;
@@ -357,7 +365,23 @@ void move(int passo)
 	// ao entrar na agua o pinguim eh rotacionado e muda posicao
 	if(moveping>0.0){
 		rotaping = 270;
-		alturaping = -4.0;
+	//	alturaping = -4.0;
+		// nadando para cima
+		if(direcao==3){
+			alturaping += (float)passo/50;
+			escalaping = -0.4;
+		}
+		// nadando para baixo
+		if(direcao==4){
+			alturaping -= (float)passo/50;
+			escalaping = 0.4;
+		}
+		// limite superior
+		if(alturaping>-3.5)
+			alturaping = -3.5;
+        // limite inferior
+		if(alturaping<-5.5)
+			direcao = 3;
 	}
 	// ao entrar na grama o pinguim eh rotacionado e muda posicao
 	if(moveping<0.0){
