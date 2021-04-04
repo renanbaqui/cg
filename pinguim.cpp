@@ -14,7 +14,8 @@ GLfloat movepeixe1 = 2.5, alturapeixe1 = -3.8, rotapeixe1 = 0.0, escalapeixe1 = 
 GLfloat movepeixe2 = 5.0, alturapeixe2 = -4.5, rotapeixe2 = 0.0, escalapeixe2 = 0.18;
 GLfloat movepeixe3 = 1.0, alturapeixe3 = -5.5, rotapeixe3 = 0.0, escalapeixe3 = 0.18;
 GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 0.15;
-GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0;
+GLfloat movepetrel = 0.0, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
+GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
 
 void init();
 void display();
@@ -306,7 +307,7 @@ void display()
 	glPopMatrix();
 	// passaro
 	glPushMatrix();
-	glTranslatef(0.0, 4.0, 0.0);
+	glTranslatef(movepetrel, alturapetrel, 0.0);
 	glScalef(1.0, 1.0, 0.0);
 	passaro();
 	glPopMatrix();
@@ -494,6 +495,32 @@ glutPostRedisplay();
 glutTimerFunc(10,move5,1);
 }
 
+void movepetrelgigante(int passo){
+	//movimenta para direita
+	if(direcaopetrel==0)
+	{
+		movepetrel += (float)passo/50;
+		//escalapetrel = ;
+		// limite direito
+		if(movepetrel>5.5)
+			direcaopetrel = 1;
+	}
+	//movimenta para esquerda
+	if(direcaopetrel==1)
+	{
+		movepetrel -= (float)passo/50;
+		// escalapetrel = ;
+		// limite esquerdo
+		if(movepetrel<-5.5)
+			direcaopetrel = 0;
+		if(movepetrel<4){
+			alturapetrel = (pow (movepetrel, 2.00)) - 2;
+		}
+	}
+glutPostRedisplay();
+glutTimerFunc(10,movepetrelgigante,1);
+}
+
 int main(int argc, char** argv) {
 
   //Inicializa a biblioteca GLUT e negocia uma seção com o gerenciador de janelas.
@@ -529,7 +556,8 @@ int main(int argc, char** argv) {
   glutTimerFunc(10,move4,1);
   // movimentacao peixe4
   glutTimerFunc(10,move5,1);
-
+  // movimentacao petrel
+  glutTimerFunc(10,movepetrelgigante,1);
   // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
   // A função de teclado deve possuir o seguinte protótipo:
   // glutKeyboardFunc(keyboard);
