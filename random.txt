@@ -1,0 +1,13 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main()
+{
+    srand (static_cast <unsigned> (time(0)));
+    float LO = 1.5, HI = 4.5;
+    float r3 = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+    
+    cout<<r3;
