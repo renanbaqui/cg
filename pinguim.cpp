@@ -1,11 +1,14 @@
 /*
- * penguim.cpp
+ * pinguim.cpp
  *
  *  Created on: 29 de mar de 2021
- *      Author: Flavia, Renan e Silvio
+ *      Author: Renan e Silvio
  */
 #include <GL/glut.h>
 #include <math.h>
+#include <iostream>
+#include <random>
+
 const double PI = 3.1415926535898;
 
 int frameNumber = 0;
@@ -14,12 +17,40 @@ GLfloat movepeixe1 = 2.5, alturapeixe1 = -3.8, rotapeixe1 = 0.0, escalapeixe1 = 
 GLfloat movepeixe2 = 5.0, alturapeixe2 = -4.5, rotapeixe2 = 0.0, escalapeixe2 = 0.18;
 GLfloat movepeixe3 = 1.0, alturapeixe3 = -5.5, rotapeixe3 = 0.0, escalapeixe3 = 0.18;
 GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 0.15;
-GLfloat movepetrel = 0.0, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
+GLfloat movepetrel = -5.5, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
 GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
+int flag = 0;
+
+// numeros aleatorios
+std::random_device rd; // obtain a random number from hardware
+std::mt19937 gen(rd()); // seed the generator
+std::uniform_real_distribution<> distr(0, 3); // define the range
+GLfloat p1y = distr(gen);
+
+std::uniform_real_distribution<> distr2(-5, -2); // define the range // distr2
+GLfloat p2x = distr2(gen);
+
+std::uniform_real_distribution<> distr3(2, 5); // define the range // distr3
+GLfloat p3x = distr3(gen);
+
+std::uniform_real_distribution<> distr4(3, 5); // define the range // distr4
+GLfloat p3y = distr4(gen);
+
+std::uniform_real_distribution<> distr5(-2, -1); // define the range // distr5
+GLfloat p4y = distr5(gen);
+
+GLfloat p4x = ((p2x + p3x)/2);
+
+/*
+GLfloat L0 = (((movepetrel-p4x)*(movepetrel-p3x))/((p2x-p4x)*(p2x-p3x)));
+GLfloat L1 = (((movepetrel-p2x)*(movepetrel-p3x))/((p4x-p2x)*(p4x-p3x)));
+GLfloat L2 = (((movepetrel-p2x)*(movepetrel-p4x))/((p3x-p2x)*(p3x-p4x)));
+*/
 
 void init();
 void display();
 void move(int passo);
+void movepetrelgigante(int passo);
 // alteracao na função keyboard para adequar a glutSpecialFunc
 void keyboard(int key, int x, int y);
 
@@ -305,9 +336,9 @@ void display()
 	glScalef(0.15, escalapeixe4, 0.0);
 	peixe();
 	glPopMatrix();
-	// passaro
+	// passaro petrel
 	glPushMatrix();
-	glTranslatef(movepetrel, alturapetrel, 0.0);
+	glTranslatef(movepetrel, alturapetrel, 0.0); // p1y = alturapetrel
 	glScalef(1.0, 1.0, 0.0);
 	passaro();
 	glPopMatrix();
@@ -495,33 +526,57 @@ glutPostRedisplay();
 glutTimerFunc(10,move5,1);
 }
 
+
+
 void movepetrelgigante(int passo){
+
 	//movimenta para direita
 	if(direcaopetrel==0)
 	{
 		movepetrel += (float)passo/50;
-		//escalapetrel = ;
-		// limite direito
-		if(movepetrel>5.5)
+	    if(p2x<movepetrel && movepetrel<p3x){
+	     	//direcaopetrel=1;
+	    	//alturapetrel = (pow (movepetrel, 2.00)) - 2;
+	    	GLfloat L0 = (((movepetrel-p4x)*(movepetrel-p3x))/((p2x-p4x)*(p2x-p3x)));
+	    	GLfloat L1 = (((movepetrel-p2x)*(movepetrel-p3x))/((p4x-p2x)*(p4x-p3x)));
+	    	GLfloat L2 = (((movepetrel-p2x)*(movepetrel-p4x))/((p3x-p2x)*(p3x-p4x)));
+	    	alturapetrel = ((4.0*L0) + (p4y*L1) + (p3y*L2));
+	    }
+	/*	escalapetrel = ;
+		 limite direito
+		if(movepetrel>8.0)
 			direcaopetrel = 1;
+		if(movepetrel>7.5)
+			alturapetrel = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+    */
 	}
-	//movimenta para esquerda
+//	movimenta para esquerda
 	if(direcaopetrel==1)
 	{
 		movepetrel -= (float)passo/50;
+	}
 		// escalapetrel = ;
 		// limite esquerdo
-		if(movepetrel<-5.5)
-			direcaopetrel = 0;
-		if(movepetrel<4){
-			alturapetrel = (pow (movepetrel, 2.00)) - 2;
-		}
-	}
+	//	if(movepetrel<-8.0)
+	//		direcaopetrel = 0;
+      //  if(movepetrel<-7.5)
+        //
+		//if(movepetrel<4){
+		//	alturapetrel = (pow (movepetrel, 2.00)) - 2;
+		//}
+	//}*/
+
+    	//alturapetrel = (pow (movepetrel, 2.00)) - 2;
+
 glutPostRedisplay();
 glutTimerFunc(10,movepetrelgigante,1);
 }
 
 int main(int argc, char** argv) {
+
+  // necessario para o numero aleatorio
+  std::random_device rd; // obtain a random number from hardware
+  std::mt19937 gen(rd()); // seed the generator
 
   //Inicializa a biblioteca GLUT e negocia uma seção com o gerenciador de janelas.
   //É possível passar argumentos para a função glutInit provenientes da linha de execução, tais como informações sobre a geometria da tela
