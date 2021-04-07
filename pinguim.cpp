@@ -18,28 +18,32 @@ GLfloat movepeixe2 = 5.0, alturapeixe2 = -4.5, rotapeixe2 = 0.0, escalapeixe2 = 
 GLfloat movepeixe3 = 1.0, alturapeixe3 = -5.5, rotapeixe3 = 0.0, escalapeixe3 = 0.18;
 GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 0.15;
 GLfloat movepetrel = -5.5, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
-GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
-int flag = 0;
+GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0, gerar=0;
 
-// numeros aleatorios
-std::random_device rd; // obtain a random number from hardware
-std::mt19937 gen(rd()); // seed the generator
-std::uniform_real_distribution<> distr(0, 3); // define the range
-GLfloat p1y = distr(gen);
 
-std::uniform_real_distribution<> distr2(-5, -2); // define the range // distr2
-GLfloat p2x = distr2(gen);
+// numeros aleatorios para as coordenadas dos pontos
+GLfloat p1y, p2x, p3x, p3y, p4x, p4y;
 
-std::uniform_real_distribution<> distr3(2, 5); // define the range // distr3
-GLfloat p3x = distr3(gen);
+std::random_device rd; 		// obtem um numero aleatorio do hardware
+std::mt19937 gen(rd()); 	// alimenta o gerador
 
-std::uniform_real_distribution<> distr4(3, 5); // define the range // distr4
-GLfloat p3y = distr4(gen);
+std::uniform_real_distribution<> distr(1, 4); 		// define o range // distr
+std::uniform_real_distribution<> distr2(-4, -2); 	// define o range // distr2
+std::uniform_real_distribution<> distr3(2, 4); 		// define o range // distr3
+std::uniform_real_distribution<> distr4(3, 5); 		// define o range // distr4
+std::uniform_real_distribution<> distr5(-2, -1); 	// define o range // distr5
 
-std::uniform_real_distribution<> distr5(-2, -1); // define the range // distr5
-GLfloat p4y = distr5(gen);
+//método de geracao de coordenadas aleatorias
+void gera(){
 
-GLfloat p4x = ((p2x + p3x)/2);
+	p1y = distr(gen);
+	p2x = distr2(gen);
+	p3x = distr3(gen);
+	p3y = distr4(gen);
+	// ponto medio p2x e p3x
+	p4x = ((p2x + p3x)/2);
+	p4y = distr5(gen);
+}
 
 /*
 GLfloat L0 = (((movepetrel-p4x)*(movepetrel-p3x))/((p2x-p4x)*(p2x-p3x)));
@@ -51,7 +55,7 @@ void init();
 void display();
 void move(int passo);
 void movepetrelgigante(int passo);
-// alteracao na função keyboard para adequar a glutSpecialFunc
+// alteracao na funcao keyboard para adequar a glutSpecialFunc
 void keyboard(int key, int x, int y);
 
 
@@ -527,21 +531,33 @@ glutTimerFunc(10,move5,1);
 }
 
 
-
 void movepetrelgigante(int passo){
 
 	//movimenta para direita
 	if(direcaopetrel==0)
 	{
+		// quando muda a direcao novas coordenadas sao geradas
+		if(gerar==1){
+		    gera();
+			gerar=0;
+		}
+
 		movepetrel += (float)passo/50;
+		// movimento parabolico com interpolacao polinomial
 	    if(p2x<movepetrel && movepetrel<p3x){
-	     	//direcaopetrel=1;
+
 	    	//alturapetrel = (pow (movepetrel, 2.00)) - 2;
 	    	GLfloat L0 = (((movepetrel-p4x)*(movepetrel-p3x))/((p2x-p4x)*(p2x-p3x)));
 	    	GLfloat L1 = (((movepetrel-p2x)*(movepetrel-p3x))/((p4x-p2x)*(p4x-p3x)));
 	    	GLfloat L2 = (((movepetrel-p2x)*(movepetrel-p4x))/((p3x-p2x)*(p3x-p4x)));
-	    	alturapetrel = ((4.0*L0) + (p4y*L1) + (p3y*L2));
+	    	alturapetrel = ((p1y*L0) + (p4y*L1) + (p3y*L2));
 	    }
+
+	    // limite direito
+	    if(movepetrel>5.5){
+	        direcaopetrel=1;
+	    }
+	 }
 	/*	escalapetrel = ;
 		 limite direito
 		if(movepetrel>8.0)
@@ -549,11 +565,28 @@ void movepetrelgigante(int passo){
 		if(movepetrel>7.5)
 			alturapetrel = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
     */
-	}
+
 //	movimenta para esquerda
 	if(direcaopetrel==1)
 	{
+	    // quando muda a direcao novas coordenadas sao geradas
+		if(gerar==0){
+		    gera();
+			gerar=1;
+		}
 		movepetrel -= (float)passo/50;
+	    if(p2x<movepetrel && movepetrel<p3x){
+
+	    	//alturapetrel = (pow (movepetrel, 2.00)) - 2;
+	    	GLfloat L0 = (((movepetrel-p4x)*(movepetrel-p3x))/((p2x-p4x)*(p2x-p3x)));
+	    	GLfloat L1 = (((movepetrel-p2x)*(movepetrel-p3x))/((p4x-p2x)*(p4x-p3x)));
+	    	GLfloat L2 = (((movepetrel-p2x)*(movepetrel-p4x))/((p3x-p2x)*(p3x-p4x)));
+	    	alturapetrel = ((p1y*L0) + (p4y*L1) + (p3y*L2));
+	    }
+	    // limite esquerdo
+	    if(movepetrel<-5.5){
+	        direcaopetrel=0;
+	    }
 	}
 		// escalapetrel = ;
 		// limite esquerdo
@@ -577,7 +610,7 @@ int main(int argc, char** argv) {
   // necessario para o numero aleatorio
   std::random_device rd; // obtain a random number from hardware
   std::mt19937 gen(rd()); // seed the generator
-
+  gera();
   //Inicializa a biblioteca GLUT e negocia uma seção com o gerenciador de janelas.
   //É possível passar argumentos para a função glutInit provenientes da linha de execução, tais como informações sobre a geometria da tela
   glutInit(&argc, argv);
