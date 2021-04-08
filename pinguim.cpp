@@ -24,11 +24,18 @@ GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 
 GLfloat movepetrel = -5.5, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
 
 GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
-GLint gerar=0, tempoConta = 1000, texto = 7.0;
+GLint gerar=0, tempoConta = 2000, texto = 7.0;
+
+GLfloat pfilx = -5.0, pfily = -2.8;
+
+bool pesc = false;
 
 
-// numeros aleatorios para as coordenadas dos pontos
+// numeros aleatorios para as coordenadas dos pontos do petrel
 GLfloat p1y, p2x, p3x, p3y, p4x, p4y;
+
+// numeros aleatorios para as alturas dos peixes
+GLfloat a1, a2, a3, a4;
 
 std::random_device rd; 		// obtem um numero aleatorio do hardware
 std::mt19937 gen(rd()); 	// alimenta o gerador
@@ -38,6 +45,11 @@ std::uniform_real_distribution<> distr2(-4, -2); 	// define o range // distr2
 std::uniform_real_distribution<> distr3(2, 4); 		// define o range // distr3
 std::uniform_real_distribution<> distr4(3, 5); 		// define o range // distr4
 std::uniform_real_distribution<> distr5(-2, -1); 	// define o range // distr5
+
+std::uniform_real_distribution<> distr6(-5.5, -3.5); 	// define o range // distr6
+std::uniform_real_distribution<> distr7(-5.5, -3.5); 	// define o range // distr7
+std::uniform_real_distribution<> distr8(-5.5, -3.5); 	// define o range // distr8
+std::uniform_real_distribution<> distr9(-5.5, -3.5); 	// define o range // distr9
 
 //método de geracao de coordenadas aleatorias
 void gera(){
@@ -49,6 +61,12 @@ void gera(){
 	// ponto medio p2x e p3x
 	p4x = ((p2x + p3x)/2);
 	p4y = distr5(gen);
+
+	a1 = distr6(gen);
+	a2 = distr7(gen);
+	a3 = distr8(gen);
+	a4 = distr9(gen);
+
 }
 
 /*
@@ -261,6 +279,8 @@ void filhote()
 	glPopMatrix();
 }
 
+
+
 void peixe()
 {
 	glColor3f(0.0, 0.0, 0.0);
@@ -296,6 +316,33 @@ void passaro()
 	glPopMatrix();
 }
 
+void pinguimcompeixe()
+{
+	glPushMatrix();
+	glTranslatef(0.7, 2.3, 0.0);
+	glRotatef(90.0, 0.0, 0.0, 1.0);
+	glScalef(0.165, 0.4, 0.0);
+	peixe();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.1, 2.5, 0.0);
+	glScalef(0.5, 0.5, 0.0);
+	cabeca();
+	glPopMatrix();
+	pata();
+	corpo();
+}
+
+void pescado()
+{
+	glPushMatrix();
+	glTranslatef((moveping + 0.38), alturaping + 0.8, 0.0);
+	glRotatef(90.0, 0.0, 0.0, 1.0);
+	glScalef(0.14, 0.14, 0.0);
+	peixe();
+	glPopMatrix();
+}
+
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -317,7 +364,7 @@ void display()
 	glPopMatrix();
     // filhote
 	glPushMatrix();
-	glTranslatef(-5.0, -2.8, 0.0);
+	glTranslatef(pfilx, pfily, 0.0);
 	glScalef(0.2, 0.2, 0.0);
 	filhote();
 	glPopMatrix();
@@ -362,7 +409,29 @@ void display()
     glRasterPos2i( -1.8, texto );
     glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, t);
 
-	glutSwapBuffers();
+    if (pesc==true)
+	{
+		// pinguim com peixe na boca
+		glPushMatrix();
+		glTranslatef(moveping, alturaping, 0.0);
+		glRotatef(rotaping, 0.0, 0.0, 1.0);
+		glScalef(escalaping, 0.4, 0.0);
+		pinguimcompeixe();
+		glPopMatrix();
+	}
+
+	if (moveping <= pfilx + 0.5)
+	{
+		pesc = false;
+		glPushMatrix();
+		glTranslatef(moveping, alturaping, 0.0);
+		glRotatef(rotaping, 0.0, 0.0, 1.0);
+		glScalef(escalaping, 0.4, 0.0);
+		pinguim();
+		glPopMatrix();
+	}
+
+    glutSwapBuffers();
 }
 
 void keyboard(int key, int x, int y){
@@ -396,7 +465,7 @@ void move(int passo)
 		moveping += (float)passo/50;
 		escalaping = 0.4;
 		// limite direito de movimento
-		if(moveping>5.0){
+		if(moveping>0.5){
 	      direcao = 0;
 		  rotaping = 0;
 		}
@@ -443,6 +512,24 @@ void move(int passo)
 	if(direcao==0 && moveping>0.0){
 		rotaping = 90;
 	}
+
+	if ((moveping + 0.95 >= movepeixe1 - 0.5) && (alturaping < alturapeixe1 + 0.5 && alturaping > alturapeixe1 - 0.5) && pesc == false){
+		pesc = true;
+	    alturapeixe1 = a1;
+	}
+	else if ((moveping + 0.95 >= movepeixe2 - 0.5) && (alturaping < alturapeixe2 + 0.5 && alturaping > alturapeixe2 - 0.5) && pesc == false){
+		pesc = true;
+		alturapeixe2 = a2;
+	}
+	else if ((moveping + 0.95 >= movepeixe3 - 0.5) && (alturaping < alturapeixe3 + 0.5 && alturaping > alturapeixe3 - 0.5) && pesc == false){
+		pesc = true;
+		alturapeixe3 = a3;
+	}
+	else if ((moveping + 0.95 >= movepeixe4 - 0.5) && (alturaping < alturapeixe4 + 0.5 && alturaping > alturapeixe4 - 0.5) && pesc == false){
+		pesc = true;
+		alturapeixe4 = a4;
+	}	
+	
 
 // tentativa de consertar bug que quando esta nadando para o lado esquerdo e digita qualquer tecla, ele olha para cima
 //	if(direcao==2 && moveping>0.0){
@@ -626,6 +713,8 @@ void tempo(int passo){
 
 	if(tempoConta<100){
 		moveping = -3.0;
+		movepetrel = 0.0;
+		alturapetrel = 1.0;
 		texto = 4.0;
 	}
 
