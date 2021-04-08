@@ -5,9 +5,13 @@
  *      Author: Renan e Silvio
  */
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <math.h>
 #include <iostream>
 #include <random>
+//#include <chrono>
+//#include <thread>
+
 
 const double PI = 3.1415926535898;
 
@@ -18,7 +22,9 @@ GLfloat movepeixe2 = 5.0, alturapeixe2 = -4.5, rotapeixe2 = 0.0, escalapeixe2 = 
 GLfloat movepeixe3 = 1.0, alturapeixe3 = -5.5, rotapeixe3 = 0.0, escalapeixe3 = 0.18;
 GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 0.15;
 GLfloat movepetrel = -5.5, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
-GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0, gerar=0;
+
+GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
+GLint gerar=0, tempoConta = 1000, texto = 7.0;
 
 
 // numeros aleatorios para as coordenadas dos pontos
@@ -59,14 +65,16 @@ void movepetrelgigante(int passo);
 void keyboard(int key, int x, int y);
 
 
+
 GLint wsize_x = 750;
 GLint wsize_y = 550;
 
 float xPos, yPos;
 
+
 void init() {
   // define a cor de background da janela
-  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClearColor(0.592, 0.807, 0.921, 1.0);
 
   // define o sistema de visualização - tipo de projeção
   glMatrixMode(GL_PROJECTION);
@@ -85,6 +93,7 @@ float Yc(float y){
 	yPos = 6 - y*(12.0/wsize_y);
 	return yPos;
 }
+
 
 void grama()
 {
@@ -299,14 +308,14 @@ void display()
 
 	glColor3f(0.0, 0.0, 1.0);
 	agua();
-
+    // pinguim
 	glPushMatrix();
 	glTranslatef(moveping, alturaping, 0.0);
 	glRotatef(rotaping, 0.0, 0.0, 1.0);
 	glScalef(escalaping, 0.4, 0.0);
 	pinguim();
 	glPopMatrix();
-
+    // filhote
 	glPushMatrix();
 	glTranslatef(-5.0, -2.8, 0.0);
 	glScalef(0.2, 0.2, 0.0);
@@ -346,6 +355,12 @@ void display()
 	glScalef(1.0, 1.0, 0.0);
 	passaro();
 	glPopMatrix();
+
+    // mensagem fim de jogo
+	glColor4f(1.0, 0.0, 0.0, 0.0);
+	const unsigned char* t = reinterpret_cast<const unsigned char *>("FIM DE JOGO");
+    glRasterPos2i( -1.8, texto );
+    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, t);
 
 	glutSwapBuffers();
 }
@@ -605,6 +620,20 @@ glutPostRedisplay();
 glutTimerFunc(10,movepetrelgigante,1);
 }
 
+// tempo de jogo
+void tempo(int passo){
+	tempoConta -= (float)passo/50;
+
+	if(tempoConta<100){
+		moveping = -3.0;
+		texto = 4.0;
+	}
+
+	glutPostRedisplay();
+	glutTimerFunc(10,tempo,1);
+}
+
+
 int main(int argc, char** argv) {
 
   // necessario para o numero aleatorio
@@ -646,6 +675,10 @@ int main(int argc, char** argv) {
   glutTimerFunc(10,move5,1);
   // movimentacao petrel
   glutTimerFunc(10,movepetrelgigante,1);
+  // tempo de jogo
+  glutTimerFunc(10,tempo,1);
+
+
   // Indica que sempre que uma tecla for pressionada no teclado, GLUT deverá chama a função keyboard() para tratar eventos de teclado (keyboard callback).
   // A função de teclado deve possuir o seguinte protótipo:
   // glutKeyboardFunc(keyboard);
