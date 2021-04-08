@@ -24,7 +24,9 @@ GLfloat movepeixe4 = 3.5, alturapeixe4 = -5.1, rotapeixe4 = 0.0, escalapeixe4 = 
 GLfloat movepetrel = -5.5, alturapetrel = 4.0; // rotapetrel = 0.0, escalapetrel = 0.15;
 
 GLint direcao = 2, direcaopeixe1 = 0, direcaopeixe2 = 0, direcaopeixe3 = 0, direcaopeixe4 = 0, direcaopetrel = 0;
-GLint gerar=0, tempoConta = 2000, texto = 7.0;
+GLint gerar=0, texto = 7.0, texto2 = 7.0, texto3 = 7.0, texto4 = 7.0;
+GLint tempoConta = 18000; 	// contador de tempo do jogo
+GLint tempoFilhote = 3600; 	// contador de tempo do filhote
 
 GLfloat pfilx = -5.0, pfily = -2.8;
 
@@ -409,6 +411,25 @@ void display()
     glRasterPos2i( -1.8, texto );
     glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, t);
 
+    // mensagem fim de jogo
+	glColor4f(1.0, 0.0, 0.0, 0.0);
+	const unsigned char* u = reinterpret_cast<const unsigned char *>("O FILHOTE MORREU");
+    glRasterPos2i( -2.8, texto2 );
+    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, u);
+
+    // mensagem fim de jogo
+	glColor4f(1.0, 0.0, 0.0, 0.0);
+	const unsigned char* v = reinterpret_cast<const unsigned char *>("VOCÊ GANHOU");
+    glRasterPos2i( -1.8, texto3 );
+    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, v);
+
+    // mensagem fim de jogo
+	glColor4f(1.0, 0.0, 0.0, 0.0);
+	const unsigned char* x = reinterpret_cast<const unsigned char *>("VOCÊ PERDEU");
+    glRasterPos2i( -1.8, texto4 );
+    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, x);
+
+
     if (pesc==true)
 	{
 		// pinguim com peixe na boca
@@ -429,6 +450,10 @@ void display()
 		glScalef(escalaping, 0.4, 0.0);
 		pinguim();
 		glPopMatrix();
+	}
+
+	if ((moveping <= pfilx + 0.5) && (pesc == true)){
+		tempoFilhote += 3500;
 	}
 
     glutSwapBuffers();
@@ -528,8 +553,18 @@ void move(int passo)
 	else if ((moveping + 0.95 >= movepeixe4 - 0.5) && (alturaping < alturapeixe4 + 0.5 && alturaping > alturapeixe4 - 0.5) && pesc == false){
 		pesc = true;
 		alturapeixe4 = a4;
-	}	
-	
+	}
+    // colisao petrel
+	if ((moveping >= movepetrel - 0.5) && (moveping <= movepetrel + 0.5) && (alturaping >= alturapetrel -1.3)){
+		tempoConta = -10;
+		texto4 = 3.0;
+		/*
+		moveping = -3.0;
+		movepetrel = 0.0;
+		alturapetrel = 1.0;
+		texto = 4.0;*/
+
+	}
 
 // tentativa de consertar bug que quando esta nadando para o lado esquerdo e digita qualquer tecla, ele olha para cima
 //	if(direcao==2 && moveping>0.0){
@@ -632,7 +667,6 @@ glutPostRedisplay();
 glutTimerFunc(10,move5,1);
 }
 
-
 void movepetrelgigante(int passo){
 
 	//movimenta para direita
@@ -709,13 +743,25 @@ glutTimerFunc(10,movepetrelgigante,1);
 
 // tempo de jogo
 void tempo(int passo){
-	tempoConta -= (float)passo/50;
+	//tempoConta -= (float)passo/50;
+	tempoConta -= 1;
+	tempoFilhote -= 1;
 
-	if(tempoConta<100){
+	if(tempoConta<0){
 		moveping = -3.0;
 		movepetrel = 0.0;
 		alturapetrel = 1.0;
 		texto = 4.0;
+	/*	if(tempoFilhote>0){
+			texto3 = 3.0;
+		}*/
+	}
+	else if(tempoFilhote<0){
+		moveping = -3.0;
+		movepetrel = 0.0;
+		alturapetrel = 1.0;
+		texto2 = 4.0;
+		texto4 = 3.0;
 	}
 
 	glutPostRedisplay();
