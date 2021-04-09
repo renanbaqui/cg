@@ -7,7 +7,7 @@
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include <math.h>
-#include <iostream> 	// biblioteca auxiliar para numeros aleatorios
+#include <iostream> 		// biblioteca auxiliar para numeros aleatorios
 #include <random>		// biblioteca auxiliar para numeros aleatorios
 
 const double PI = 3.1415926535898;
@@ -358,41 +358,41 @@ void display()
 	// desenho da agua
 	glColor3f(0.0, 0.0, 1.0);
 	agua();
-    // desenho do pinguim
+    	// desenho do pinguim
 	glPushMatrix();
 	glTranslatef(moveping, alturaping, 0.0);
 	glRotatef(rotaping, 0.0, 0.0, 1.0);
 	glScalef(escalaping, 0.4, 0.0);
 	pinguim();
 	glPopMatrix();
-    // desenho do filhote
+    	// desenho do filhote
 	glPushMatrix();
 	glTranslatef(pfilx, pfily, 0.0);
 	glScalef(0.2, 0.2, 0.0);
 	filhote();
 	glPopMatrix();
-    // desenho do peixe 1
+    	// desenho do peixe 1
 	glPushMatrix();
 	glTranslatef(movepeixe1, alturapeixe1, 0.0);
 	glRotatef(90.0, 0.0, 0.0, 1.0);
 	glScalef(0.15, escalapeixe1, 0.0);
 	peixe();
 	glPopMatrix();
-    // desenho do peixe 2
+    	// desenho do peixe 2
 	glPushMatrix();
 	glTranslatef(movepeixe2, alturapeixe2, 0.0);
 	glRotatef(90.0, 0.0, 0.0, 1.0);
 	glScalef(0.18, escalapeixe2, 0.0);
 	peixe();
 	glPopMatrix();
-    // desenho do peixe 3
+    	// desenho do peixe 3
 	glPushMatrix();
 	glTranslatef(movepeixe3, alturapeixe3, 0.0);
 	glRotatef(-90.0, 0.0, 0.0, 1.0);
 	glScalef(0.18, escalapeixe3, 0.0);
 	peixe();
 	glPopMatrix();
-    // desenho do peixe 4
+    	// desenho do peixe 4
 	glPushMatrix();
 	glTranslatef(movepeixe4, alturapeixe4, 0.0);
 	glRotatef(-90.0, 0.0, 0.0, 1.0);
@@ -406,23 +406,23 @@ void display()
 	passaro();
 	glPopMatrix();
 
-    // mensagem: fim de jogo
+    	// mensagem: fim de jogo
 	glColor4f(1.0, 0.0, 0.0, 0.0);
 	const unsigned char* t = reinterpret_cast<const unsigned char *>("FIM DE JOGO");
-    glRasterPos2i( -1.8, texto );
-    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, t);
+    	glRasterPos2i( -1.8, texto );
+    	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, t);
 
-    // mensagem: o filhote morreu
+    	// mensagem: o filhote morreu
 	glColor4f(1.0, 0.0, 0.0, 0.0);
 	const unsigned char* u = reinterpret_cast<const unsigned char *>("O FILHOTE MORREU");
-    glRasterPos2i( -2.0, texto2 );
-    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, u);
+    	glRasterPos2i( -2.0, texto2 );
+    	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, u);
 
-    // mensagem: você perdeu
+    	// mensagem: você perdeu
 	glColor4f(1.0, 0.0, 0.0, 0.0);
 	const unsigned char* x = reinterpret_cast<const unsigned char *>("VOCÊ PERDEU");
-    glRasterPos2i( -1.8, texto4 );
-    glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, x);
+    	glRasterPos2i( -1.8, texto4 );
+    	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, x);
 
     // condicao se o pinguim pescar o peixe
     if (pesc==true)
