@@ -6,7 +6,7 @@
  */
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include <math.h>
+#include <math.h>		// biblioteca matematica
 #include <iostream> 		// biblioteca auxiliar para numeros aleatorios
 #include <random>		// biblioteca auxiliar para numeros aleatorios
 
