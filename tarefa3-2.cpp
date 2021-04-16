@@ -180,29 +180,61 @@ void TeclasEspeciais (int tecla, int x, int y)
 void keyboard (unsigned char key, int x, int y){
   switch (key) {
   case 'r':
-    r += 0.1;
-    cout << "r: "<<r<<endl;
-    break;
+    if(r>=1.0){
+	  r += 0;
+	}
+	else{
+	  r += 0.1;
+	  cout << "r: "<<r<<endl;
+	}
+	break;
   case 'R':
-    r -= 0.1;
-    cout << "r: "<<r<<endl;
-    break;
+    if(r<=0.0){
+	  r += 0;
+	}
+	else{
+	  r -= 0.1;
+	  cout << "r: "<<r<<endl;
+	}
+	break;
+
   case 'g':
-    g += 0.1;
-    cout << "g: "<<g<<endl;
-    break;
+    if(g>=1.0){
+	  g += 0;
+	}
+	else{
+	  g += 0.1;
+	  cout << "g: "<<g<<endl;
+	}
+	break;
   case 'G':
-    g -= 0.1;
-    cout << "g: "<<g<<endl;
-    break;
+    if(g<=0.0){
+	  g += 0;
+	}
+	else{
+	  g -= 0.1;
+	  cout << "g: "<<g<<endl;
+	}
+	break;
+
   case 'b':
-    b += 0.1;
-    cout << "b: "<<b<<endl;
-    break;
+    if(b>=1.0){
+	  b += 0;
+	}
+	else{
+	  b += 0.1;
+	  cout << "b: "<<b<<endl;
+	}
+	break;
   case 'B':
-    b -= 0.1;
-    cout << "b: "<<b<<endl;
-    break;
+    if(b<=0.0){
+	  b += 0;
+	}
+	else{
+	  b -= 0.1;
+	  cout << "b: "<<b<<endl;
+	}
+	break;
   }
   glutPostRedisplay();
 }
