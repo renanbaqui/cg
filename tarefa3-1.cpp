@@ -43,13 +43,13 @@ void Desenha(void)
 {
 	// Limpa a janela de visualiza??o com a cor
 	// de fundo definida previamente
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// parametro adicional passado	
 	DefineIluminacao();
 	// Troca cor corrente para azul
 	glColor3f(0.0f, 0.0f, 1.0f);
 
 	// Desenha o teapot com a cor corrente (wire-frame)
-	glutSolidTeapot(50.0f);
+	glutSolidTeapot(50.0f);	// funcao substituida
 
 	// Execu??o dos comandos de desenho
 	glutSwapBuffers();
@@ -57,7 +57,7 @@ void Desenha(void)
 
 
 // Inicialização
-void Inicializa(void)
+void Inicializa(void) // funcao alterada
 {
 	// Define a cor de fundo da janela de visualização como branca
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -180,7 +180,7 @@ int main()
 	glutInit(&argc,argv);
 
 	// Define do modo de operacao da GLUT
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);	// parametro adicional passado
 
 	// Especifica a posi??o inicial da janela GLUT
     glutInitWindowPosition(5,5);
