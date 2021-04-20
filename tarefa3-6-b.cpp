@@ -73,12 +73,18 @@ void Desenha(void)
 	// glutSolidTeapot(50.0f);
 
 	// Desenha um cubo
-	glBegin(GL_POLYGON); // Face posterior
+/*	glBegin(GL_POLYGON); // Face posterior
 	glNormal3f(0,0,1); // Normal da face
 	glVertex3f(50.0, 50.0, 50.0);
 	glVertex3f(-50.0, 50.0, 50.0);
 	glVertex3f(-50.0, -50.0, 50.0);
 	glVertex3f(50.0, -50.0, 50.0);
+*/
+	glBegin(GL_TRIANGLE_STRIP);
+	glNormal3f(0,0,1); // Normal da face
+	glVertex3f(50.0, 50.0, 50.0);
+	glVertex3f(-50.0, 50.0, 50.0);
+	glVertex3f(-50.0, -50.0, 50.0);
 	glEnd();
 	glBegin(GL_POLYGON); // Face frontal
 	glNormal3f(0,0,-1); // Normal da face
@@ -153,9 +159,9 @@ void Inicializa(void)
 
 	especMaterial = 60;
 
-	x = 0;
-	y = 50;
-	z = 50;
+	x = 265;
+	y = 310;
+	z = -5;
 }
 
 
@@ -329,9 +335,9 @@ int main()
 	// Teclado normal
 	glutKeyboardFunc(keyboard);
 	// Funcao para teclas especiais do teclado
-	glutSpecialFunc(keyboardSpecial);
+//	glutSpecialFunc(keyboardSpecial);
 	// Registra a funcao callback para tratamento das teclas especiais
-//	glutSpecialFunc(TeclasEspeciais);
+	glutSpecialFunc(TeclasEspeciais);
 	// Registra a funcao callback para tratamento do redimensionamento da janela
     glutReshapeFunc(AlteraTamanhoJanela);
 	// Registra a funcao callback para tratamento do mouse
