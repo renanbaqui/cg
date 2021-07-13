@@ -2,7 +2,7 @@
 
 ## Project Requirements
 
-- The project should be implemented using the OpenGL API, and the libraries gl, glu, glut the only ones that can be used
+- The project should be implemented using the OpenGL API, and the libraries gl, glu, glut the only ones that can be used.
 
 ### Objective
 
